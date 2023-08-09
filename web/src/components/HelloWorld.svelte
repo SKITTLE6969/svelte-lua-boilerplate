@@ -1,81 +1,57 @@
-<script lang="ts">
-  import { visibility } from '../store/stores';
-  import { fetchNui } from '../utils/fetchNui';
+<script>
+  // Exported properties which can be passed as props
+  export let parent = [];
+  export let size = 150;  // DEFAULT_SIZE
+  export let onClick = null;
+  export let menuItems = [
+    {id: 'one', title: 'One'},
+    {id: 'two', title: 'Two'}
+  ];
+  export let closeOnClick = false;
 
-  interface ReturnData {
-    x: number;
-    y: number;
-    z: number;
-  }
-
-  let clientData: ReturnData;
-
-  const handleClientData = () => {
-    fetchNui('getClientData')
-      .then((returnData) => {
-        clientData = returnData;
-      })
-      .catch((e) => {
-        clientData = { x: 100, y: 100, z: 100 };
-      });
-  };
-
-  const closeDialog = () => {
-    visibility.set(false);
-    fetchNui('hideUI');
-  };
+  // Internal state
+  let radius = 55;
+  let innerRadius = 18;
+  let sectorSpace = 3.5;
+  let sectorCount = Math.max(menuItems.length, 3);  // MIN_SECTORS
+  let scale = 1;
+  let holder = null;
+  let parentMenu = [];
+  let parentItems = [];
+  let levelItems = null;
 </script>
 
-<div class="container">
-  <h2>Svelte NUI Popup!</h2>
-  <div style="margin: 0.3vh 0;">Player coords: {JSON.stringify(clientData) || ''}</div>
-  <div class="btn-wrapper">
-    <button on:click={handleClientData}> Get client coords </button>
-    <button on:click={closeDialog}>Close popup</button>
-  </div>
-  <span>Or press the escape key!</span>
-</div>
+let currentMenu = null;
+
+  function open() {
+    if (!currentMenu) {
+      currentMenu = createMenu('menu inner', menuItems);
+      // The appending will be handled reactively in the template
+      // Next tick logic will be handled using Svelte's afterUpdate hook or transitions
+    }
+  }
+
+  function close(bool) {
+    // The AJAX request using jQuery will need to be replaced with a Fetch API call or other AJAX methods
+    // Other direct DOM manipulations will be handled reactively
+
+    if (currentMenu) {
+      // This will handle the removal of the menu reactively
+      currentMenu = null;
+    }
+  }
+
+  function createHolder() {
+    // The holder creation will be handled in the template itself
+    // The properties like width and height will be applied using inline styles or CSS classes based on size
+  }
+
+  function createMenu(className, items) {
+    // This function's logic needs to be extracted further from the RadialMenu.js
+    // For now, we're just setting up a placeholder
+    return {};
+  }
 
 <style>
-  .container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    border-radius: 5px;
-    width: 17%;
-    height: 17%;
-    font-size: 1.5vh;
-    color: white;
-    background-color: #ff3c04;
-    user-select: none;
-  }
-
-  .btn-wrapper {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    align-content: center;
-    width: 100%;
-  }
-
-  button {
-    flex: 0 45%;
-    padding: 0.8vh;
-    background-color: white;
-    color: black;
-    font-family: 'Segoe UI';
-    border: none;
-    border-radius: 5px;
-  }
-
-  button:hover {
-    background-color: rgb(212, 212, 212);
-  }
+  /* main.css content will be pasted here */
 </style>
